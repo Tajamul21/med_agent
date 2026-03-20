@@ -1,0 +1,172 @@
+{
+  "10662791_F2_32": { 
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "Calculator",
+        "description": "A tool that can perform basic arithmetic calculations.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "expression",
+            "description": "The arithmetic expression to calculate, e.g., '2 + 2 * 3'.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "The result of the arithmetic calculation.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],  
+    "files": [
+      {
+        "type": "image",
+        "path": "10662791_F2.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Extract the numerical values of the bars in the top pane and difference between the highest and lowest bar values."
+      },
+      {
+      "role": "assistant",
+      "thought": "First, describe the figure to understand how many panels there are and what the top panel represents numerically.",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "ImageDescription",
+            "arguments": {
+              "image": "../images/7e110f34-d0eb-402e-a448-b81db4ced1cb.png"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "name": "ImageDescription",
+      "content": {
+        "type": "text",
+        "content": "A multi-panel bar chart with four stacked panels. Each panel shows five vertical bars with error bars. The top panel has a y-axis ranging approximately from 0 to 30."
+      }
+    },
+    {
+      "role": "assistant",
+      "thought": "Use OCR to read any visible axis numbers or labels that help estimate the bar values in the top panel.",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "OCR",
+            "arguments": {
+              "image": "../images/7e110f34-d0eb-402e-a448-b81db4ced1cb.png"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "name": "OCR",
+      "content": {
+        "type": "text",
+        "content": "0\n10\n20\n30"
+      }
+    },
+    {
+      "role": "assistant",
+      "thought": "Estimate the highest and lowest bar values in the top panel using the visible scale, then compute their difference.",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "Calculator",
+            "arguments": {
+              "expression": "26 - 1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "name": "Calculator",
+      "content": {
+        "type": "text",
+        "content": "25"
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "From the top panel, the highest bar is approximately 26 units and the lowest bar is about 1 unit. The difference between them is approximately 25 units."
+    }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+         "25"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

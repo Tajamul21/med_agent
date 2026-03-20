@@ -1,0 +1,215 @@
+{
+  "11953858_fig2": {
+    "tools": [
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "11953858_fig2.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Based on the image, which patients have higher survival rates"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/11953858_fig2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to figure type and what is being compared (Kaplan–Meier curves by histology and age group)."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Two-panel Kaplan–Meier overall survival plots (survival probability vs years). Left panel labeled “<12 months”, right panel labeled “≥12 months”. Each panel shows two curves labeled “Favourable” (higher) and “Unfavourable” (lower), with censoring tick marks."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/11953858_fig2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Extract labels and age-group annotations directly from the figure to support the comparison."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(92, 6, 206, 22) Favourable\n(89, 72, 207, 90) Unfavourable\n(136, 102, 214, 118) <12 months\n(345, 6, 459, 22) Favourable\n(345, 72, 463, 90) Unfavourable\n(386, 102, 468, 118) ≥12 months\n(10, 16, 33, 110) Survival probability\n(256, 16, 279, 110) Survival probability\n(156, 124, 196, 138) Years\n(408, 124, 448, 138) Years"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11953858_fig2.jpg",
+                "bbox": "(20,20,240,120)",
+                "attribute": "relative position of survival curves for favourable vs unfavourable histology and their separation over time"
+              }
+            }
+          }
+        ],
+        "thought": "Verify in the <12 months panel that favourable curve remains above unfavourable with clear separation."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "In the <12 months panel, the curve labeled “Favourable” stays near the top (high survival probability) with only a small decline, while the “Unfavourable” curve drops earlier and remains clearly lower; the two curves are well separated across follow-up."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11953858_fig2.jpg",
+                "bbox": "(270,20,500,120)",
+                "attribute": "relative position of survival curves for favourable vs unfavourable histology and their separation over time"
+              }
+            }
+          }
+        ],
+        "thought": "Verify in the ≥12 months panel that favourable curve remains above unfavourable with clear separation."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "In the ≥12 months panel, the “Favourable” curve remains high with modest decline, whereas the “Unfavourable” curve steadily decreases to much lower survival probabilities over time; there is persistent separation with favourable above unfavourable."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The image shows a comparison of the cumulated overall survival rates for patients with favorable and unfavorable histology. For patients younger than 12 months, the survival rates for those with favorable histology are significantly higher than those with unfavorable histology. Similarly, for patients aged 12 months or older, the survival rates for those with favorable histology are also significantly higher than those with unfavorable histology. This indicates that patients with favorable histology have better overall survival rates compared to patients with unfavorable histology, regardless of their age group."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "younger than 12 months"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

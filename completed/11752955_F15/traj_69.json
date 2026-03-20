@@ -1,0 +1,190 @@
+{
+  "11752955_F15": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "11752955_F15.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "What organ is shown in the image?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/11752955_F15.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any labels/markers on the CT image that might indicate the organ."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/11752955_F15.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to modality/anatomy and identify the organ in the axial CT slice."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Axial contrast-enhanced CT image of the upper abdomen showing solid organs and bowel; an arrow points to a homogeneous, wedge-shaped soft-tissue organ in the left upper quadrant adjacent to the stomach and left kidney."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11752955_F15.jpg",
+                "bbox": "(380,120,495,260)",
+                "attribute": "Identify the organ/tissue appearance in this left upper quadrant region indicated by the arrow."
+              }
+            }
+          }
+        ],
+        "thought": "Confirm the arrowed left upper quadrant structure has imaging characteristics and location consistent with spleen."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "The region shows homogeneous soft-tissue density consistent with splenic parenchyma in the left upper quadrant, lateral to the stomach and superior-lateral to the left kidney; the arrow overlies this splenic tissue."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The image shows the spleen, which is an organ located in the upper left part of the abdomen."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "spleen"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

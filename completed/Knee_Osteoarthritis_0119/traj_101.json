@@ -1,0 +1,190 @@
+{
+  "Knee_Osteoarthritis_0119": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "Knee_Osteoarthritis_9896668L.png",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "What imaging technique is utilized to acquire this picture?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "Knee_Osteoarthritis_9896668L.png"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any embedded modality labels/markers on the image."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "Knee_Osteoarthritis_9896668L.png"
+              }
+            }
+          }
+        ],
+        "thought": "Identify modality and anatomy from overall appearance."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Grayscale radiographic image of a knee joint showing distal femur and proximal tibia with joint space and bony contours, consistent with a plain radiograph."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "Knee_Osteoarthritis_9896668L.png",
+                "bbox": "(40, 20, 470, 360)",
+                "attribute": "imaging modality appearance (radiograph vs MRI/CT/US)"
+              }
+            }
+          }
+        ],
+        "thought": "Confirm radiograph-like appearance by assessing bone contrast and soft tissue detail in a representative region."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Region shows high-contrast cortical bone outlines with relatively uniform soft-tissue density and projectional overlap typical of a plain X-ray (radiograph), not cross-sectional CT/MRI or ultrasound."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "x_ray."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "x_ray."
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

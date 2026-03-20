@@ -1,0 +1,190 @@
+{
+  "Pulmonary_Chest_MC_0012": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "Pulmonary_Chest_MC_MCUCXR_0017_0.png",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Review this chest radiograph and provide the most likely overall diagnosis (normal vs abnormal)."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "Pulmonary_Chest_MC_MCUCXR_0017_0.png"
+              }
+            }
+          }
+        ],
+        "thought": "Check for laterality markers and projection/position labels that may affect interpretation."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(75, 44, 148, 117) R\n(1078, 33, 1219, 72) PA\n(1052, 74, 1229, 132) ERECT\n(1208, 64, 1249, 398) PT\n(1123, 70, 1177, 406) DEPT\n(1037, 70, 1098, 406) HEALTH\n(958, 72, 1029, 406) MC\n(871, 72, 952, 406) SILVER\n(793, 72, 868, 406) SPRING\n(1207, 399, 1249, 433) MD"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "Pulmonary_Chest_MC_MCUCXR_0017_0.png"
+              }
+            }
+          }
+        ],
+        "thought": "Get global description of the PA erect chest X-ray to assess for obvious cardiopulmonary abnormality."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "PA erect chest radiograph with right-side marker. Lungs appear clear bilaterally without focal consolidation, pleural effusion, or pneumothorax. Cardiomediastinal silhouette is within normal size; costophrenic angles are sharp."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "Pulmonary_Chest_MC_MCUCXR_0017_0.png",
+                "bbox": "(180, 160, 1110, 930)",
+                "attribute": "any focal airspace opacity, pleural effusion, or pneumothorax"
+              }
+            }
+          }
+        ],
+        "thought": "Verify within lung fields and pleural spaces for absence of acute findings."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Within the bilateral lung fields there is no focal airspace consolidation; no visible pleural effusion and no pleural line to suggest pneumothorax. Costophrenic angles appear sharp."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The diagnosis is normal lung."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "The diagnosis is normal lung."
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "11752972_F2": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "11752972_F2.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "What is the main region focused in the image?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/11752972_F2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any on-image labels/markers that indicate anatomy or laterality."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(8, 6, 118, 78) 050857-5\n(6, 78, 118, 118) 18-MR-62\n(6, 118, 40, 132) Kg\n(6, 132, 40, 148) AN\n(154, 10, 214, 34) 07-FEB\n(154, 34, 214, 54) 1997\n(414, 116, 448, 148) L\n(392, 352, 448, 468) Th: 5.0\nPos: 0.5\nCor/Ica\nF F A I L"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/11752972_F2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to modality and key structures; identify what the figure is emphasizing."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Coronal brain MRI slice (appears T2-weighted) showing medial temporal lobes. A black arrow points to a medial temporal structure on the left side of the image; ventricles and cortical sulci are visible."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11752972_F2.jpg",
+                "bbox": "(95,200,215,320)",
+                "attribute": "medial temporal lobe/hippocampal appearance and any atrophy"
+              }
+            }
+          }
+        ],
+        "thought": "Interrogate the arrowed medial temporal region for hippocampal morphology/atrophy."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "In this medial temporal region, the hippocampal formation appears relatively small with prominence of adjacent CSF spaces/sulcal widening, consistent with mild hippocampal volume loss (atrophy)."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The main focus of the image is the hippocampus, which is a region of the brain involved in learning and memory. The image shows mild hippocampal atrophy, which is a reduction in the size of the hippocampus."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "hippocampus"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

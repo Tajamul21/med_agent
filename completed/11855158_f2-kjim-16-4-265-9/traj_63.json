@@ -1,0 +1,190 @@
+{
+  "11855158_f2-kjim-16-4-265-9": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "11855158_f2-kjim-16-4-265-9.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "What is the condition of the pulmonary trunk and pulmonary arteries?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/11855158_f2-kjim-16-4-265-9.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any labels/annotations on the CT figure that might indicate the pulmonary trunk/arteries or key finding."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(14, 315, 35, 343) A\n(340, 315, 362, 343) B"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/11855158_f2-kjim-16-4-265-9.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to modality and gross vascular appearance on contrast-enhanced chest CT axial images."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Two axial contrast-enhanced chest CT images labeled A and B. There is a very large contrast-opacified central vessel consistent with the main pulmonary artery/pulmonary trunk with enlarged branch pulmonary arteries; an arrow in image B points near the central pulmonary artery region."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11855158_f2-kjim-16-4-265-9.jpg",
+                "bbox": "(40,40,300,250)",
+                "attribute": "caliber/appearance of the central contrast-opacified pulmonary artery (pulmonary trunk) and proximal branches"
+              }
+            }
+          }
+        ],
+        "thought": "Verify that the central pulmonary artery and branches are enlarged/dilated on the provided CT slice."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Within this region, the central contrast-filled pulmonary artery appears markedly enlarged with prominent, dilated proximal branch pulmonary arteries compared with expected caliber."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The pulmonary trunk and pulmonary arteries appear to be markedly dilated in the chest CT scan with contrast."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "dilated"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

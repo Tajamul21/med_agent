@@ -1,0 +1,190 @@
+{
+  "11242814_f2-kjim-15-3-240-12": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "11242814_f2-kjim-15-3-240-12.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "What does the CT show in the right lung?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/11242814_f2-kjim-15-3-240-12.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any laterality markers or embedded labels that help orient the axial CT image."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(33, 359, 55, 382) R"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/11242814_f2-kjim-15-3-240-12.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Identify modality/anatomy and gross abnormality pattern on the axial chest CT slice."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Axial CT image of the chest in lung windows. There is a patchy area of increased attenuation/consolidation in the right lower lung with adjacent linear atelectatic change; the left lung appears relatively clear."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11242814_f2-kjim-15-3-240-12.jpg",
+                "bbox": "(60, 190, 300, 340)",
+                "attribute": "parenchymal abnormality (consolidation vs atelectasis) in the right lower lobe region"
+              }
+            }
+          }
+        ],
+        "thought": "Confirm the suspected right lower lobe finding by describing the parenchyma in a focused region."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Within this right lower lung region there is patchy air-space opacity/consolidation with adjacent bandlike linear opacity consistent with atelectasis."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The CT image of the chest shows patchy air-space consolidation and atelectasis in the right lower lobe of the lung."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "atelectasis"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

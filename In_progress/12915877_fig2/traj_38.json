@@ -1,0 +1,190 @@
+{
+  "12915877_fig2": {
+    "tools": [
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "12915877_fig2.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Using the provided figure, how many methods are shown to detect metastases in sentinel nodes."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/12915877_fig2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "First orient to what the figure depicts (chart vs histology) to infer what detection methods are being compared."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "A grayscale 3D-style bar chart with categories along the x-axis labeled H&E, CK-18, CEA, hTRT, MUC-1, and Total; each bar has a number and percentage above it. Y-axis ranges up to about 30."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/12915877_fig2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Extract the labels/abbreviations from the figure to determine which assays/methods are referenced."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(7, 6, 28, 34) 30\n(12, 158, 22, 177) 10\n(12, 105, 22, 124) 20\n(12, 52, 22, 71) 30\n(63, 244, 109, 266) H&E\n(75, 131, 92, 150) 8\n(75, 152, 107, 171) (4%)\n(155, 244, 210, 266) CK-18\n(173, 89, 203, 109) 15\n(173, 110, 209, 129) (7%)\n(242, 244, 284, 266) CEA\n(252, 102, 283, 122) 12\n(252, 123, 284, 142) (6%)\n(321, 244, 374, 266) hTRT\n(336, 115, 366, 135) 10\n(336, 136, 368, 155) (5%)\n(405, 244, 467, 266) MUC-1\n(422, 102, 453, 122) 12\n(422, 123, 454, 142) (6%)\n(505, 244, 555, 266) Total\n(516, 38, 546, 58) 25\n(516, 59, 558, 78) (12%)"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/12915877_fig2.jpg",
+                "bbox": "(40, 220, 580, 280)",
+                "attribute": "x-axis labels / assay names"
+              }
+            }
+          }
+        ],
+        "thought": "Confirm the x-axis assay labels correspond to histology (H&E) and molecular markers (CK-18, CEA, hTRT, MUC-1) used in RT-PCR/Southern blot context."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "The x-axis shows assay/marker labels: H&E, CK-18, CEA, hTRT, MUC-1, and Total, consistent with histologic H&E evaluation and molecular marker-based detection."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The image shows three methods used to detect metastases in sentinel nodes: conventional histology, hematoxylin and eosin (H&E) staining, and RT-PCR and Southern blot assay."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "three"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

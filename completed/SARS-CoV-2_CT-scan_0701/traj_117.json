@@ -1,0 +1,190 @@
+{
+  "SARS-CoV-2_CT-scan_0701": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "SARS-CoV-2_CT-scan_Non-Covid_200.png",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Review the provided axial chest CT image and determine whether there is imaging evidence consistent with COVID-19 pneumonia (e.g., peripheral bilateral ground-glass opacities/consolidation). Answer Yes/No."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "SARS-CoV-2_CT-scan_Non-Covid_200.png"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any embedded labels/markers that might indicate case status or slice info; then focus on lung parenchyma findings."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "SARS-CoV-2_CT-scan_Non-Covid_200.png"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to modality and look for classic COVID-19 patterns such as bilateral peripheral ground-glass opacities."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Axial chest CT image in lung window showing both lungs with predominantly clear aerated parenchyma and normal-appearing central mediastinal structures; no obvious diffuse ground-glass opacities or consolidations are apparent."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "SARS-CoV-2_CT-scan_Non-Covid_200.png",
+                "bbox": "(15,25,145,145)",
+                "attribute": "presence of peripheral ground-glass opacity or consolidation"
+              }
+            }
+          }
+        ],
+        "thought": "Verify a representative peripheral lung region for ground-glass opacity/consolidation."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Peripheral lung region appears well-aerated without visible ground-glass opacity, consolidation, or crazy-paving pattern."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "No"
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "No"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

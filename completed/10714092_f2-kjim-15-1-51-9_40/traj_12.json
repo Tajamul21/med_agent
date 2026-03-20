@@ -1,0 +1,125 @@
+{
+  "10714092_f2-kjim-15-1-51-9_40": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "10714092_f2-kjim-15-1-51-9.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Are there any on-image annotations and determine whether there are any additional findings beyond the primary abnormality."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/10714092_f2-kjim-15-1-51-9.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Run OCR to see if there are labels/annotations that indicate additional findings or laterality."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "L"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/10714092_f2-kjim-15-1-51-9.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Use a global image description to identify any additional findings such as lymphadenopathy in the neck chains."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Axial contrast-enhanced CT of the neck showing multiple rounded soft-tissue density nodules bilaterally along the expected internal jugular chain regions, consistent with cervical lymphadenopathy; an 'L' laterality marker is present."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "Yes, there are additional findings in the image. It shows multiple lymphadenopathies in both internal jugular chains. Lymphadenopathy refers to the enlargement of lymph nodes, which can be caused by various factors such as infection, inflammation, or malignancy."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "Yes,  multiple lymphadenopathies"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

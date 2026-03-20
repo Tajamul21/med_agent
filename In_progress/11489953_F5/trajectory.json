@@ -1,0 +1,190 @@
+{
+  "11489953_F5": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "11489953_F5.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "What type of tissue is shown in the image?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/11489953_F5.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for figure labels/captions indicating tissue type or experimental context."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(62, 7, 118, 26) GL117\n(178, 7, 279, 26) Anti-IL-18R\n(326, 7, 409, 26) Anti-IL-12\n(457, 7, 543, 26) Anti-IFNγ\n(556, 7, 639, 40) Anti-IL-12+\n(556, 38, 639, 58) Anti-IL-18R\n(3, 118, 42, 138) GR1\n(63, 230, 157, 270) Anti-IFNγ\n(63, 270, 157, 290) Anti-IL-12+\n(63, 290, 157, 310) Anti-IL-18R\n(205, 250, 280, 270) Anti-TNF\n(322, 250, 410, 270) Anti-TNF+\n(322, 270, 410, 290) Anti-IL-12\n(455, 250, 543, 270) Anti-TNF+\n(455, 270, 543, 290) Anti-IL-18R\n(556, 250, 639, 270) Anti-TNF+\n(556, 270, 639, 290) Anti-IL-12+\n(556, 290, 639, 310) Anti-IL-18R\n(62, 368, 118, 388) GL117\n(6, 470, 60, 490) F4/80\n(326, 470, 360, 490) CD4\n(457, 470, 490, 490) CD8\n(205, 585, 280, 605) Anti-IL-18R\n(63, 585, 157, 605) Anti-IL-18R\n(457, 585, 543, 605) Anti-IL-18R"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/11489953_F5.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to modality and specimen type (histology vs gross vs radiology) and overall appearance."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "A multi-panel scientific figure showing light microscopy images of tissue sections with immunostaining; panels are labeled with markers such as GL117, GR1, F4/80, CD4, CD8 and antibody treatments (e.g., Anti-IL-18R, Anti-IL-12, Anti-IFNγ, Anti-TNF). Brown-stained cell clusters appear on pale background."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11489953_F5.jpg",
+                "bbox": "(40, 40, 600, 330)",
+                "attribute": "histologic tissue context and staining pattern"
+              }
+            }
+          }
+        ],
+        "thought": "Verify that these are frozen tissue sections and assess morphology consistent with liver (parenchymal background with inflammatory foci)."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "The region shows multiple low-magnification micrographs of thin tissue sections with pale parenchymal background and scattered brown immunostained inflammatory cell aggregates/foci; appearance is consistent with immunohistochemistry on frozen sections rather than gross tissue or radiology."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The image shows frozen sections of mouse liver tissue."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "The image shows frozen sections of mouse liver tissue."
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

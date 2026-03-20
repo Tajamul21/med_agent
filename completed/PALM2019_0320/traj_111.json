@@ -1,0 +1,190 @@
+{
+  "PALM2019_0320": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "PALM2019_V0382.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Review the provided retinal fundus photograph and determine whether any abnormalities are present."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "PALM2019_V0382.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any embedded labels/markers that might indicate laterality or pathology annotations."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "PALM2019_V0382.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Get an overall description of the fundus image to orient to disc/macula and look for gross abnormalities."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Color retinal fundus photograph showing the optic disc on the left side with radiating retinal vessels; background retina appears tessellated with no obvious hemorrhages, exudates, or large lesions."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "PALM2019_V0382.jpg",
+                "bbox": "(90, 760, 420, 1100)",
+                "attribute": "optic disc appearance and peripapillary region"
+              }
+            }
+          }
+        ],
+        "thought": "Verify optic disc and peripapillary area for cupping, edema, hemorrhage, or myopic changes."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Optic disc is well-demarcated without swelling; vessels emerge normally. Peripapillary region shows mild atrophic/tessellated appearance consistent with myopic fundus; no disc hemorrhage seen."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "In this image, there are no apparent abnormalities. It represents a normal or fundus of high myopia."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "In this image, there are no apparent abnormalities. It represents a normal or fundus of high myopia."
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

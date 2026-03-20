@@ -1,0 +1,190 @@
+{
+  "15053042_f4-kjim-19-1-38-7": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "15053042_f4-kjim-19-1-38-7.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Using the provided gross pathology image, describe the gross appearance of the fungus ball."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/15053042_f4-kjim-19-1-38-7.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any labels/annotations on the gross specimen image that might describe the lesion."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/15053042_f4-kjim-19-1-38-7.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to the specimen type and identify the suspected fungus ball on gross view."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Gross pathology photo of a cut section of tissue (likely lung) on a blue background. There is a rounded cavity-like space containing a tan-brown, clay-like material consistent with a fungus ball."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/15053042_f4-kjim-19-1-38-7.jpg",
+                "bbox": "(95,55,190,150)",
+                "attribute": "appearance and color of the intracavitary mass"
+              }
+            }
+          }
+        ],
+        "thought": "Verify the color/texture of the intracavitary mass to describe the fungus ball grossly."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Within the cavity, there is a compact, irregular tan-to-brown mass with a dry, crumbly/clay-like appearance."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The fungus ball appears as a brownish clay-like mass in the gross view."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "The fungus ball appears as a brownish clay-like mass in the gross view."
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}
