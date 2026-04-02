@@ -88,6 +88,38 @@
             "filetype": null
           }
         ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "Searches the web for brief reference information to interpret marker meaning in histology.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": "Search query string",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "number",
+            "name": "k",
+            "description": "Number of results or snippets to return",
+            "optional": true,
+            "default": 4,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "Brief search result summary",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
       }
     ],
     "files": [
@@ -115,7 +147,7 @@
             }
           }
         ],
-        "thought": "Check for panel labels and lesion type annotations in the figure."
+        "thought": "First read the figure labels to identify how many lesion classes are shown and how the panels are organized."
       },
       {
         "role": "tool",
@@ -138,7 +170,7 @@
             }
           }
         ],
-        "thought": "Orient to modality and what each row/column depicts (wholemount, H&E, immunofluorescence) to support lesion-type characterization."
+        "thought": "Now understand the overall layout so I can relate each lesion type to wholemount appearance, H&E histology, and ZO-1/laminin staining."
       },
       {
         "role": "tool",
@@ -146,6 +178,30 @@
         "content": {
           "type": "text",
           "content": "A multi-panel scientific figure (panel A) arranged in three rows labeled Type I, Type II, and Type III, and three columns labeled Wholemount, H&E, and ZO-1/Laminin. Each row shows a different mammary gland lesion type with corresponding wholemount morphology, H&E histology, and immunofluorescence staining."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GoogleSearch",
+              "arguments": {
+                "query": "ZO-1 laminin mammary gland histology epithelial polarity basement membrane staining lesions",
+                "k": 4
+              }
+            }
+          }
+        ],
+        "thought": "Before interpreting the immunofluorescence panels, clarify what ZO-1 and laminin mark so the staining can be linked to lesion architecture and invasiveness."
+      },
+      {
+        "role": "tool",
+        "name": "GoogleSearch",
+        "content": {
+          "type": "text",
+          "content": "ZO-1 is a tight-junction marker associated with apical epithelial cell borders and polarity, while laminin highlights the basement membrane surrounding ducts/acini; together they help distinguish organized polarized epithelial structures from disorganized invasive lesions."
         }
       },
       {
@@ -163,7 +219,7 @@
             }
           }
         ],
-        "thought": "Verify Type I immunofluorescence features (polarity/lining, lumen) from the ZO-1/laminin panel."
+        "thought": "Inspect Type I to see whether it preserves organized epithelial polarity and a clear basement membrane, which would support a less advanced lesion."
       },
       {
         "role": "tool",
@@ -188,7 +244,7 @@
             }
           }
         ],
-        "thought": "Verify Type II shows more uniform multilayered epithelium with smaller/collapsed lumens and altered organization."
+        "thought": "Inspect Type II to determine whether the epithelium becomes multilayered with smaller or collapsed lumens while still retaining some ductal association."
       },
       {
         "role": "tool",
@@ -213,7 +269,7 @@
             }
           }
         ],
-        "thought": "Verify Type III shows loss of ZO-1/laminin signal and invasive cellular mass appearance."
+        "thought": "Inspect Type III for loss of polarity and basement membrane staining, which would indicate an invasive lesion."
       },
       {
         "role": "tool",
@@ -221,6 +277,31 @@
         "content": {
           "type": "text",
           "content": "In the Type III ZO-1/Laminin panel, the image is dominated by dense blue nuclei with minimal to absent red/green junctional/basement-membrane outlining; there is no clear organized ductal lumen, suggesting loss of epithelial polarity/architecture."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/12011115_fig3.jpg",
+                "bbox": "",
+                "attribute": "compare ZO-1 and laminin staining across the mammary gland lesion types and identify which lesions show organized versus disrupted epithelial and basement-membrane patterns"
+              }
+            }
+          }
+        ],
+        "thought": "Synthesize the row-wise differences to characterize each lesion type from organized polarized structures to invasive disorganized lesions."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Across the three lesion types, Type I shows organized polarized epithelial structures with clear lumens and intact basement membrane, Type II shows more cellular multilayered duct-associated lesions with reduced or collapsed lumens and less uniform staining, and Type III shows disorganized invasive cellular masses with loss of clear ZO-1 and laminin patterning."
         }
       },
       {

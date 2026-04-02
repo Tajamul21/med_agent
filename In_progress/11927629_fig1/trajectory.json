@@ -88,6 +88,38 @@
             "filetype": null
           }
         ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "Searches the web for brief reference information to interpret domain-specific abbreviations or terms.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": "Search query string",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "number",
+            "name": "k",
+            "description": "Number of results or snippets to return",
+            "optional": true,
+            "default": 4,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "Brief search result summary",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
       }
     ],
     "files": [
@@ -115,7 +147,7 @@
             }
           }
         ],
-        "thought": "Orient to the figure type and what the annotations represent before extracting tissue categories."
+        "thought": "First identify the figure type and whether the annotations correspond to different histologic compartments or lesions."
       },
       {
         "role": "tool",
@@ -138,7 +170,7 @@
             }
           }
         ],
-        "thought": "Read the labels to enumerate the tissue types present (e.g., N, G, S, IC, Sup. Inv.)."
+        "thought": "Read all annotated labels so I can enumerate the distinct tissue abbreviations present in the figure."
       },
       {
         "role": "tool",
@@ -146,6 +178,30 @@
         "content": {
           "type": "text",
           "content": "(305, 34, 461, 86) #8: Sup. Inv.\n(95, 78, 238, 122) #9: CIN II\n(92, 140, 187, 182) #10:G\n(239, 170, 334, 214) #7:IC\n(78, 215, 188, 258) #24:G\n(292, 250, 392, 292) #4:IC\n(426, 268, 590, 314) #3:CIN III\n(560, 170, 676, 214) #1:N\n(458, 210, 575, 256) #2:N\n(430, 350, 540, 392) #5:IC\n(170, 405, 270, 450) #11:S\n(560, 560, 676, 604) #12:N\n(120, 610, 280, 655) #13:CIN II\n(300, 560, 410, 604) #23:IC\n(270, 690, 390, 735) #14:IC\n(520, 650, 640, 695) #22:IC\n(300, 980, 470, 1025) #19: Sup. Inv.\n(360, 1060, 520, 1105) #16:CIN II\n(210, 1120, 330, 1165) #17:IC\n(420, 1140, 520, 1185) #18:S\n(90, 1040, 220, 1085) #21:IC\n(130, 930, 280, 975) #20:IC\n(500, 1210, 640, 1255) #15:CIN II\n(650, 300, 690, 340) F\n(650, 740, 690, 780) D\n(650, 1180, 690, 1220) B"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GoogleSearch",
+              "arguments": {
+                "query": "histology abbreviations N G S IC CIN II III superficially invasive carcinoma meaning tissue types",
+                "k": 4
+              }
+            }
+          }
+        ],
+        "thought": "The OCR gives abbreviations, so I should resolve what each abbreviation stands for before grouping them into tissue types."
+      },
+      {
+        "role": "tool",
+        "name": "GoogleSearch",
+        "content": {
+          "type": "text",
+          "content": "N = normal epithelium; G = glandular epithelium; S = stroma; IC = invasive carcinoma; CIN II/III = cervical intraepithelial neoplasia; Sup. Inv. = superficially invasive carcinoma."
         }
       },
       {
@@ -163,7 +219,7 @@
             }
           }
         ],
-        "thought": "Confirm one representative invasive carcinoma label in the central upper section to ground the tissue-type mapping."
+        "thought": "Check one representative labeled focus in the figure to confirm that the annotations indeed mark specific tissue categories used for microdissection."
       },
       {
         "role": "tool",
@@ -175,13 +231,38 @@
       },
       {
         "role": "assistant",
-        "content": "The image shows various types of tissue, including normal squamous epithelium, gland epithelium, stroma, invasive carcinoma, and superficially invasive carcinoma. The arrows point to the foci where samples were microdissected."
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11927629_fig1.jpg",
+                "bbox": "",
+                "attribute": "map labeled regions (N, G, S, IC, CIN II/III, Sup. Inv.) to distinct tissue categories"
+              }
+            }
+          }
+        ],
+        "thought": "Now consolidate the resolved abbreviations into the full set of tissue types present across the annotated regions."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "The annotated regions span normal epithelium, glandular epithelium, stroma, cervical intraepithelial neoplasia (CIN II/III), invasive carcinoma, and superficially invasive carcinoma."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The image shows various tissue types, including normal squamous epithelium, gland epithelium, stroma, cervical intraepithelial neoplasia (CIN II/III), invasive carcinoma, and superficially invasive carcinoma. The arrows indicate the microdissected foci."
       }
     ],
     "gt_answer": {
       "whitelist": [
         [
-          "The image shows various types of tissue, including normal squamous epithelium, gland epithelium, stroma, invasive carcinoma, and superficially invasive carcinoma. The arrows point to the foci where samples were microdissected."
+          "The image shows various tissue types, including normal squamous epithelium, gland epithelium, stroma, cervical intraepithelial neoplasia (CIN II/III), invasive carcinoma, and superficially invasive carcinoma. The arrows indicate the microdissected foci."
         ]
       ],
       "blacklist": null
