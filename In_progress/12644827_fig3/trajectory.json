@@ -231,13 +231,13 @@
       },
       {
         "role": "assistant",
-        "content": "The technique used is the BrdUrd comet assay, a single-cell gel electrophoresis method used to assess DNA damage and repair in individual cells."
+        "content": "The comet assay."
       }
     ],
     "gt_answer": {
       "whitelist": [
         [
-          "The technique used is the BrdUrd comet assay, a single-cell gel electrophoresis method used to assess DNA damage and repair in individual cells."
+          "The comet assay."
         ]
       ],
       "blacklist": null
