@@ -181,7 +181,7 @@
     "gt_answer": {
       "whitelist": [
         [
-          "The image is based on dynamic contrast-enhanced MRI using a macromolecular contrast agent called BSA-Gd-DTPA. This type of MRI allows for the visualization of time-dependent changes in signal enhancement in tumors."
+          "contrast-enhanced MRI"
         ]
       ],
       "blacklist": null

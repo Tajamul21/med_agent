@@ -107,6 +107,10 @@
     ],
     "dialogs": [
       {
+        "role": "user",
+        "content": "What type of MRI sequence is shown in the top row of images?"
+      },
+      {
         "role": "assistant",
         "tool_calls": [
           {
