@@ -115,7 +115,7 @@
             }
           }
         ],
-        "thought": "First orient to the figure type and axes to infer the clinical message."
+        "thought": "First identify the plot type and what variable is being compared across groups."
       },
       {
         "role": "tool",
@@ -138,7 +138,7 @@
             }
           }
         ],
-        "thought": "Extract legend/axis text to confirm what stratification is being used."
+        "thought": "Read the axis and legend text to confirm that the curves represent survival grouped by tumor response categories."
       },
       {
         "role": "tool",
@@ -158,30 +158,30 @@
               "arguments": {
                 "image": "../images/14562011_fig2.jpg",
                 "bbox": "(450,110,735,410)",
-                "attribute": "legend categories and what the curves represent"
+                "attribute": "legend categories and what grouping variable the survival curves are divided by"
               }
             }
           }
         ],
-        "thought": "Verify the legend region to ensure the curves are stratified by tumour response categories."
+        "thought": "Verify that the legend explicitly divides the patients by tumor size response patterns after treatment."
       },
       {
         "role": "tool",
         "name": "RegionAttributeDescription",
         "content": {
           "type": "text",
-          "content": "The region shows the plot legend titled 'Tumour response' with line-style keys for groups: 'No assessment', 'Decrease', 'Increase', and 'Static', indicating separate survival curves for each response category."
+          "content": "The region shows the plot legend titled 'Tumour response' with line-style keys for groups: 'No assessment', 'Decrease', 'Increase', and 'Static', indicating that the survival curves are separated by tumor response or tumor size trend categories."
         }
       },
       {
         "role": "assistant",
-        "content": "The main focus of the figure is to show the survival of patients with liver cancer based on their response to the first treatment with TACE, as assessed by CT scans taken 6-8 weeks following the procedure."
+        "content": "The figure is a survival curve of cancer patients, divided by the response to a treatment based on tumor size trends (no assessment, decrease, increase, static)."
       }
     ],
     "gt_answer": {
       "whitelist": [
         [
-          "The main focus of the figure is to show the survival of patients with liver cancer based on their response to the first treatment with TACE, as assessed by CT scans taken 6-8 weeks following the procedure."
+          "The figure is a survival curve of cancer patients, divided by the response to a treatment based on tumor size trends (no assessment, decrease, increase, static)."
         ]
       ],
       "blacklist": null
