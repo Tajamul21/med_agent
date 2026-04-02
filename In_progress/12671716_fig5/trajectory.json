@@ -8,84 +8,55 @@
           {
             "type": "image",
             "name": "image",
-            "description": null,
-            "optional": false,
-            "default": null,
-            "filetype": null
+            "optional": false
           }
         ],
         "outputs": [
           {
             "type": "text",
             "name": null,
-            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
-            "optional": false,
-            "default": null,
-            "filetype": null
+            "description": "OCR results"
           }
         ]
       },
       {
         "name": "ImageDescription",
-        "description": "A useful tool that returns a brief description of the input image.",
+        "description": "Returns a brief description of the image.",
         "inputs": [
           {
             "type": "image",
             "name": "image",
-            "description": null,
-            "optional": false,
-            "default": null,
-            "filetype": null
+            "optional": false
           }
         ],
         "outputs": [
           {
             "type": "text",
-            "name": null,
-            "description": null,
-            "optional": false,
-            "default": null,
-            "filetype": null
+            "name": null
           }
         ]
       },
       {
         "name": "RegionAttributeDescription",
-        "description": "Describe the attribute of a region of the input image.",
+        "description": "Describe attributes of a region in the image.",
         "inputs": [
           {
             "type": "image",
-            "name": "image",
-            "description": null,
-            "optional": false,
-            "default": null,
-            "filetype": null
+            "name": "image"
           },
           {
             "type": "text",
-            "name": "bbox",
-            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
-            "optional": false,
-            "default": null,
-            "filetype": null
+            "name": "bbox"
           },
           {
             "type": "text",
-            "name": "attribute",
-            "description": "The attribute to describe",
-            "optional": false,
-            "default": null,
-            "filetype": null
+            "name": "attribute"
           }
         ],
         "outputs": [
           {
             "type": "text",
-            "name": null,
-            "description": null,
-            "optional": false,
-            "default": null,
-            "filetype": null
+            "name": null
           }
         ]
       }
@@ -93,8 +64,7 @@
     "files": [
       {
         "type": "image",
-        "path": "12671716_fig5.jpg",
-        "url": null
+        "path": "12671716_fig5.jpg"
       }
     ],
     "dialogs": [
@@ -115,14 +85,14 @@
             }
           }
         ],
-        "thought": "Check axes/labels to determine whether the figure represents a dynamic MRI measurement (e.g., signal vs time)."
+        "thought": "Check axis labels to determine if the figure reflects contrast dynamics (e.g., signal enhancement over time)."
       },
       {
         "role": "tool",
         "name": "OCR",
         "content": {
           "type": "text",
-          "content": "(18, 10, 78, 356) Signal\nenhancement\n(252, 360, 520, 392) Time (mins)\n(0, 0, 0, 0) 1.5\n(0, 0, 0, 0) 1.0\n(0, 0, 0, 0) 0.5\n(0, 0, 0, 0) 0\n(0, 0, 0, 0) 2\n(0, 0, 0, 0) 4\n(0, 0, 0, 0) 6\n(0, 0, 0, 0) 8\n(0, 0, 0, 0) 10\n(0, 0, 0, 0) 12\n(0, 0, 0, 0) 14\n(0, 0, 0, 0) 16\n(0, 0, 0, 0) 18\n(0, 0, 0, 0) 20"
+          "content": "Signal enhancement; Time (mins)"
         }
       },
       {
@@ -138,14 +108,14 @@
             }
           }
         ],
-        "thought": "Understand whether the figure represents a time-dependent contrast uptake curve typical of dynamic MRI."
+        "thought": "Understand the plot type and whether it reflects contrast uptake curves rather than static imaging."
       },
       {
         "role": "tool",
         "name": "ImageDescription",
         "content": {
           "type": "text",
-          "content": "A line graph plotting signal enhancement versus time (minutes), with multiple curves (circles, squares, triangles) and error bars, consistent with a dynamic contrast enhancement time-course plot rather than an anatomic MRI slice."
+          "content": "A line graph showing signal enhancement versus time with multiple curves, typical of contrast uptake and washout behavior."
         }
       },
       {
@@ -157,25 +127,25 @@
               "name": "RegionAttributeDescription",
               "arguments": {
                 "image": "../images/12671716_fig5.jpg",
-                "bbox": "(40,40,760,390)",
-                "attribute": "what is being plotted and what it implies about MRI acquisition technique"
+                "bbox": "(0,0,512,512)",
+                "attribute": "relationship between signal enhancement and time"
               }
             }
           }
         ],
-        "thought": "Confirm that signal enhancement over time indicates contrast kinetics, characteristic of dynamic contrast-enhanced MRI."
+        "thought": "Confirm that the figure represents contrast enhancement behavior over time, indicating a contrast-based MRI technique."
       },
       {
         "role": "tool",
         "name": "RegionAttributeDescription",
         "content": {
           "type": "text",
-          "content": "The plot shows signal enhancement over time following contrast administration, with multiple curves indicating different conditions, consistent with dynamic contrast uptake and washout measurement typical of DCE-MRI."
+          "content": "Signal intensity increases and changes over time after contrast administration, indicating contrast-enhanced imaging dynamics."
         }
       },
       {
         "role": "assistant",
-        "content": "The image is based on dynamic contrast-enhanced MRI using a macromolecular contrast agent called BSA-Gd-DTPA. This type of MRI allows for the visualization of time-dependent changes in signal enhancement in tumors."
+        "content": "The image shows contrast-enhanced MRI."
       }
     ],
     "gt_answer": {
@@ -183,8 +153,7 @@
         [
           "contrast-enhanced MRI"
         ]
-      ],
-      "blacklist": null
+      ]
     }
   }
 }
