@@ -140,29 +140,6 @@
           {
             "type": "function",
             "function": {
-              "name": "ImageDescription",
-              "arguments": {
-                "image": "../images/12732654_fig5.jpg"
-              }
-            }
-          }
-        ],
-        "thought": "Orient to the figure type and determine what outcomes are being compared across different immunization conditions."
-      },
-      {
-        "role": "tool",
-        "name": "ImageDescription",
-        "content": {
-          "type": "text",
-          "content": "Bar chart comparing incidence of histopathological EAE or optic neuritis across immunization conditions (e.g., MOG35-55 + PT, PT alone, MOG35-55 at different doses). Legend indicates black bars for optic neuritis and gray bars for EAE; x-axis shows percent incidence."
-        }
-      },
-      {
-        "role": "assistant",
-        "tool_calls": [
-          {
-            "type": "function",
-            "function": {
               "name": "OCR",
               "arguments": {
                 "image": "../images/12732654_fig5.jpg"
@@ -231,9 +208,33 @@
       },
       {
         "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/12732654_fig5.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to the figure type and determine what outcomes are being compared across different immunization conditions."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Bar chart comparing incidence of histopathological EAE or optic neuritis across immunization conditions (e.g., MOG35-55 + PT, PT alone, MOG35-55 at different doses). Legend indicates black bars for optic neuritis and gray bars for EAE; x-axis shows percent incidence."
+        }
+      },
+      {
+        "role": "assistant",
         "content": "The purpose of the immunization protocols in this study is to investigate the effects of different immunization methods on the development of optic neuritis and EAE (experimental autoimmune encephalomyelitis) in 2D2 TCR transgenic mice. EAE is a widely used animal model for studying multiple sclerosis, an autoimmune disease that affects the central nervous system. Optic neuritis is an inflammation of the optic nerve, which can be associated with multiple sclerosis. By comparing the outcomes of various immunization protocols, researchers aim to better understand the relationship between the immune response and the development of these conditions."
       }
     ],
+
     "gt_answer": {
       "whitelist": [
         [
