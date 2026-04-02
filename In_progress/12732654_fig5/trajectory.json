@@ -213,25 +213,25 @@
             "function": {
               "name": "GoogleSearch",
               "arguments": {
-                "query": "What do MOG35-55, PT alone, MOG35-55 100 µg, and MOG35-55 10 µg represent in EAE and optic neuritis?",
+                "query": "What is the purpose of using MOG35-55, PT alone, MOG35-55 100 µg, and MOG35-55 10 µg represent in EAE and optic neuritis?",
                 "k": 4
               }
             }
           }
         ],
-        "thought": "Clarify what each immunization condition represents biologically in EAE models (antigen, adjuvant, dose) to explain the purpose of comparing them."
+        "thought": "Refer to what MOG35-55, PT alone, MOG35-55 100 µg, and MOG35-55 10 µg mean in the context of EAE and optic neuritis, and verify how these conditions are used experimentally."
       },
       {
         "role": "tool",
         "name": "GoogleSearch",
         "content": {
           "type": "text",
-          "content": "MOG35-55 is a myelin oligodendrocyte glycoprotein peptide used to induce EAE as an autoimmune model of multiple sclerosis. PT (pertussis toxin) is used as an adjuvant to enhance disease induction. Different doses of MOG35-55 (e.g., 100 µg vs 10 µg) modulate the severity and incidence of disease, allowing comparison of immune responses and pathology such as optic neuritis."
+          "content": "MOG35-55 is a myelin oligodendrocyte glycoprotein peptide used to induce EAE as a model of autoimmune demyelinating disease. PT alone serves as an adjuvant-only control, while different doses of MOG35-55 such as 100 µg and 10 µg are used to modulate the strength of disease induction and compare the resulting incidence of EAE and optic neuritis."
         }
       },
       {
         "role": "assistant",
-        "content": "The purpose of the immunization protocols is to investigate how different immunization conditions (type of antigen, presence of adjuvant, and antigen dose) influence the development of optic neuritis and EAE. By comparing MOG35-55 with or without pertussis toxin and at different doses, the study evaluates how immune activation strength affects disease incidence and helps model autoimmune pathology relevant to multiple sclerosis."
+        "content": "The purpose of the immunization protocols in this study is to investigate the effects of different immunization methods on the development of optic neuritis and EAE (experimental autoimmune encephalomyelitis) in 2D2 TCR transgenic mice. EAE is a widely used animal model for studying multiple sclerosis, an autoimmune disease that affects the central nervous system. Optic neuritis is an inflammation of the optic nerve, which can be associated with multiple sclerosis. By comparing the outcomes of various immunization protocols, researchers aim to better understand the relationship between the immune response and the development of these conditions."
       }
     ],
     "gt_answer": {
