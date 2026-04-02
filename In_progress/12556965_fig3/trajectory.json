@@ -115,7 +115,7 @@
             }
           }
         ],
-        "thought": "First identify the figure type and whether it is showing a sequence alteration across different tissue samples."
+        "thought": "First identify the figure type and whether it shows a sequence change across different tissue samples."
       },
       {
         "role": "tool",
@@ -138,7 +138,7 @@
             }
           }
         ],
-        "thought": "Read the base calls and labels to determine the specific nucleotide change and compare the SCC panel against dermis and epidermis."
+        "thought": "Read the base calls and labels to determine which nucleotide differs in the SCC sample compared with dermis and epidermis."
       },
       {
         "role": "tool",
@@ -158,30 +158,30 @@
               "arguments": {
                 "image": "../images/12556965_fig3.jpg",
                 "bbox": "(60, 80, 260, 560)",
-                "attribute": "sequencing peak pattern at the arrowed nucleotide and whether it indicates a base substitution"
+                "attribute": "sequencing peak pattern at the arrowed nucleotide and whether it indicates a point substitution"
               }
             }
           }
         ],
-        "thought": "Confirm that the SCC chromatogram has a mixed or altered peak at the marked position, supporting a substitution relative to the normal tissues."
+        "thought": "Confirm that the SCC chromatogram has an altered peak at the marked site, consistent with a single-base substitution relative to the normal tissues."
       },
       {
         "role": "tool",
         "name": "RegionAttributeDescription",
         "content": {
           "type": "text",
-          "content": "In the SCC panel at the arrowed position there are overlapping peaks (mixed signal) rather than a single clean peak, consistent with a heteroplasmic/mixed-base call (shown as 'N' in the base string), while the dermis and epidermis panels show a clean 'C' at that position."
+          "content": "In the SCC panel at the arrowed position there are overlapping peaks (mixed signal) rather than a single clean peak, consistent with a heteroplasmic or mixed-base call, while the dermis and epidermis panels show a clean 'C' at that position."
         }
       },
       {
         "role": "assistant",
-        "content": "The mutation is a C to T transition at nucleotide position 438 in the noncoding D-loop region."
+        "content": "The image shows a C to T point mutation."
       }
     ],
     "gt_answer": {
       "whitelist": [
         [
-          "The mutation is a C to T transition at nucleotide position 438 in the noncoding D-loop region."
+          "The image shows a C to T point mutation."
         ]
       ],
       "blacklist": null
