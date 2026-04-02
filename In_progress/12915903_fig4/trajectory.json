@@ -88,6 +88,38 @@
             "filetype": null
           }
         ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "Searches the web for brief reference information to interpret clinical staging and metastasis detection terminology.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": "Search query string",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "number",
+            "name": "k",
+            "description": "Number of results or snippets to return",
+            "optional": true,
+            "default": 4,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "Brief search result summary",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
       }
     ],
     "files": [
@@ -115,7 +147,7 @@
             }
           }
         ],
-        "thought": "Identify the figure type and clinical context for 'staging' (likely cancer staging workflow)."
+        "thought": "Identify the figure type and clinical context for staging, which appears to be a cancer staging workflow."
       },
       {
         "role": "tool",
@@ -138,7 +170,7 @@
             }
           }
         ],
-        "thought": "Extract any explicit definitions or key phrases in the diagram about staging and classification."
+        "thought": "Extract the explicit workflow text to determine what tests and classification steps are included in staging."
       },
       {
         "role": "tool",
@@ -163,7 +195,7 @@
             }
           }
         ],
-        "thought": "Confirm that staging culminates in TNM classification and stage grouping, supporting the definition/purpose."
+        "thought": "Confirm that the workflow culminates in TNM classification and stage grouping."
       },
       {
         "role": "tool",
@@ -175,13 +207,37 @@
       },
       {
         "role": "assistant",
-        "content": "Staging in this context refers to the process of determining the extent and severity of a histologically proven invasive cancer. Staging helps healthcare professionals to understand how advanced the cancer is, which in turn helps them to plan the most appropriate treatment options and predict the patient's prognosis. Staging typically takes into account factors such as the size and location of the tumor, whether it has spread to nearby lymph nodes, and whether it has metastasized (spread) to other parts of the body."
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GoogleSearch",
+              "arguments": {
+                "query": "What methods are used to detect metastases in sentinel lymph nodes and how do they relate to TNM cancer staging classification?",
+                "k": 4
+              }
+            }
+          }
+        ],
+        "thought": "Clarify what detection methods are used for sentinel node metastases and how they relate to TNM staging in cancer classification workflows."
+      },
+      {
+        "role": "tool",
+        "name": "GoogleSearch",
+        "content": {
+          "type": "text",
+          "content": "Metastases in sentinel lymph nodes are typically detected by sentinel lymph node biopsy with histopathology, often supplemented by immunohistochemistry or molecular assays in selected settings. These findings contribute to the N category in TNM staging, which records whether and how extensively regional lymph nodes are involved and helps determine overall cancer stage and management."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "Staging in this context refers to the process of determining the extent and severity of a histologically proven invasive cancer. It integrates clinical examination, biopsy, imaging, and nodal or metastatic assessment into a TNM classification so clinicians can understand how advanced the cancer is. This helps guide treatment selection, estimate prognosis, and determine whether there is local extension, lymph-node involvement, or distant spread."
       }
     ],
     "gt_answer": {
       "whitelist": [
         [
-          "Staging in this context refers to the process of determining the extent and severity of a histologically proven invasive cancer. Staging helps healthcare professionals to understand how advanced the cancer is, which in turn helps them to plan the most appropriate treatment options and predict the patient's prognosis. Staging typically takes into account factors such as the size and location of the tumor, whether it has spread to nearby lymph nodes, and whether it has metastasized (spread) to other parts of the body."
+          "Staging in this context refers to the process of determining the extent and severity of a histologically proven invasive cancer. It integrates clinical examination, biopsy, imaging, and nodal or metastatic assessment into a TNM classification so clinicians can understand how advanced the cancer is. This helps guide treatment selection, estimate prognosis, and determine whether there is local extension, lymph-node involvement, or distant spread."
         ]
       ],
       "blacklist": null

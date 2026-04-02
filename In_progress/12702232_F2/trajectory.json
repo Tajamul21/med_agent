@@ -64,6 +64,38 @@
             "filetype": null
           }
         ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "Searches the web for brief reference information to interpret MRI sequence characteristics.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": "Search query string",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "number",
+            "name": "k",
+            "description": "Number of results or snippets to return",
+            "optional": true,
+            "default": 4,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "Brief search result summary",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
       }
     ],
     "files": [
@@ -112,7 +144,7 @@
             }
           }
         ],
-        "thought": "Verify top-row sequence by checking for T1-weighted post-contrast enhancement pattern in a representative top-left image."
+        "thought": "Verify the signal pattern in the top row to see if it matches contrast-enhanced T1-weighted imaging."
       },
       {
         "role": "tool",
@@ -120,6 +152,30 @@
         "content": {
           "type": "text",
           "content": "In this top-left axial brain slice, there is a focal markedly hyperintense (bright) region consistent with contrast enhancement against relatively darker brain parenchyma, typical of post-gadolinium T1-weighted imaging."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GoogleSearch",
+              "arguments": {
+                "query": "Which imaging modalities and MRI sequences show gadolinium contrast enhancement as bright lesions against darker brain parenchyma?",
+                "k": 4
+              }
+            }
+          }
+        ],
+        "thought": "Verify which MRI sequences show gadolinium-enhanced lesions as bright signal to confirm that this pattern corresponds to post-contrast T1-weighted imaging."
+      },
+      {
+        "role": "tool",
+        "name": "GoogleSearch",
+        "content": {
+          "type": "text",
+          "content": "Gadolinium contrast enhancement appears bright on T1-weighted MRI sequences because it shortens T1 relaxation time, making enhancing lesions hyperintense compared to surrounding brain tissue. This is a standard feature of post-contrast T1-weighted imaging."
         }
       },
       {

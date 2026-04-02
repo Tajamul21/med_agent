@@ -88,6 +88,38 @@
             "filetype": null
           }
         ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "Searches the web for brief reference information to interpret thoracic anatomy and vertebral level relationships.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": "Search query string",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "number",
+            "name": "k",
+            "description": "Number of results or snippets to return",
+            "optional": true,
+            "default": 4,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "Brief search result summary",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
       }
     ],
     "files": [
@@ -115,7 +147,7 @@
             }
           }
         ],
-        "thought": "First orient to modality/plane and identify where the arrow points relative to spine and mediastinum."
+        "thought": "First orient to modality/plane and identify where the arrow points relative to spine, lungs, and mediastinum."
       },
       {
         "role": "tool",
@@ -138,7 +170,7 @@
             }
           }
         ],
-        "thought": "Check for any on-image labels indicating vertebral level or orientation (R/L) to localize the lesion level."
+        "thought": "Check for orientation markers and metadata to confirm left/right and scanning level context."
       },
       {
         "role": "tool",
@@ -163,7 +195,7 @@
             }
           }
         ],
-        "thought": "Confirm the arrowed structure is a posterior mediastinal/paraspinal mass rather than intrapulmonary or spinal canal lesion."
+        "thought": "Confirm the lesion lies in the posterior mediastinum/paraspinal region adjacent to the vertebral body and separate from lung parenchyma."
       },
       {
         "role": "tool",
@@ -175,7 +207,31 @@
       },
       {
         "role": "assistant",
-        "content": "The mass is located in the posterior mediastinum at the T4-5 level of the thoracic spine."
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GoogleSearch",
+              "arguments": {
+                "query": "At what vertebral level the lung parenchyma and mediastinal mass can be seen?",
+                "k": 4
+              }
+            }
+          }
+        ],
+        "thought": "Identify at what vertebral level a paraspinal posterior mediastinal mass adjacent to vertebral body and lungs is typically visualized."
+      },
+      {
+        "role": "tool",
+        "name": "GoogleSearch",
+        "content": {
+          "type": "text",
+          "content": "Both lung parenchyma and posterior mediastinal structures are typically visualized in axial imaging at mid to upper thoracic vertebral levels, commonly around T3 to T6 where the posterior mediastinum lies adjacent to the vertebral bodies and lungs."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The mass is located in the posterior mediastinum at the T4–5 level of the thoracic spine."
       }
     ],
     "gt_answer": {

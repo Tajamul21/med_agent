@@ -88,6 +88,38 @@
             "filetype": null
           }
         ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "Searches the web for brief reference information to interpret assay readouts and map them to the relevant experimental technique.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": "Search query string",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "number",
+            "name": "k",
+            "description": "Number of results or snippets to return",
+            "optional": true,
+            "default": 4,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "Brief search result summary",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
       }
     ],
     "files": [
@@ -100,7 +132,7 @@
     "dialogs": [
       {
         "role": "user",
-        "content": "Using the provided figure, what is the purpose of the BrdUrd comet assay?"
+        "content": "Using the provided figure, what technique is used to assess DNA damage and repair in individual cells?"
       },
       {
         "role": "assistant",
@@ -115,7 +147,7 @@
             }
           }
         ],
-        "thought": "Orient to the figure type and what is being quantified to link it to the assay purpose."
+        "thought": "Orient to the figure type and identify what assay readout is being quantified across patients and tissue sites."
       },
       {
         "role": "tool",
@@ -138,7 +170,7 @@
             }
           }
         ],
-        "thought": "Extract any labels/legend text to confirm the assay readout and context."
+        "thought": "Extract figure labels and legend text to confirm the assay readout and biological context."
       },
       {
         "role": "tool",
@@ -163,25 +195,49 @@
             }
           }
         ],
-        "thought": "Verify that '% comet tail DNA' is the key readout indicating DNA strand breaks/damage in the comet assay."
+        "thought": "Verify that '% comet tail DNA' is the main readout and that it reflects DNA migration used as a damage metric."
       },
       {
         "role": "tool",
         "name": "RegionAttributeDescription",
         "content": {
           "type": "text",
-          "content": "This region contains a histogram-style bar plot with y-axis '% cells' and x-axis '% comet tail DNA', indicating distribution of cells by the fraction of DNA migrating into the comet tail (a comet assay damage metric)."
+          "content": "This region contains a histogram-style bar plot with y-axis '% cells' and x-axis '% comet tail DNA', indicating distribution of cells by the fraction of DNA migrating into the comet tail, a standard comet assay measure of DNA damage."
         }
       },
       {
         "role": "assistant",
-        "content": "The BrdUrd comet assay is a technique used to assess DNA damage and repair in individual cells. It is particularly useful for detecting single-strand breaks, double-strand breaks, and alkali-labile sites in the DNA. The assay involves incorporating BrdUrd (bromodeoxyuridine), a thymidine analog, into the DNA of cells during replication. When the cells are subjected to electrophoresis, the damaged DNA fragments migrate away from the nucleus, forming a comet-like tail. The percentage of tail DNA is then measured to evaluate the extent of DNA damage or repair in the cells."
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GoogleSearch",
+              "arguments": {
+                "query": "What assay measures DNA damage using percent comet tail DNA and shows distribution of cells comet tail DNA histogram?",
+                "k": 4
+              }
+            }
+          }
+        ],
+        "thought": "Verify which assay uses percent comet tail DNA as the readout for DNA strand breaks and repair in individual cells."
+      },
+      {
+        "role": "tool",
+        "name": "GoogleSearch",
+        "content": {
+          "type": "text",
+          "content": "Percent comet tail DNA is a standard readout of the comet assay (single-cell gel electrophoresis), which measures DNA strand breaks and repair at the level of individual cells. When BrdUrd labeling is incorporated, the assay can specifically assess replicated DNA and repair-associated damage patterns."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The technique used is the BrdUrd comet assay, a single-cell gel electrophoresis method used to assess DNA damage and repair in individual cells."
       }
     ],
     "gt_answer": {
       "whitelist": [
         [
-          "The BrdUrd comet assay is a technique used to assess DNA damage and repair in individual cells. It is particularly useful for detecting single-strand breaks, double-strand breaks, and alkali-labile sites in the DNA. The assay involves incorporating BrdUrd (bromodeoxyuridine), a thymidine analog, into the DNA of cells during replication. When the cells are subjected to electrophoresis, the damaged DNA fragments migrate away from the nucleus, forming a comet-like tail. The percentage of tail DNA is then measured to evaluate the extent of DNA damage or repair in the cells."
+          "The technique used is the BrdUrd comet assay, a single-cell gel electrophoresis method used to assess DNA damage and repair in individual cells."
         ]
       ],
       "blacklist": null

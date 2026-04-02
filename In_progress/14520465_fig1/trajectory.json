@@ -88,6 +88,38 @@
             "filetype": null
           }
         ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "Searches the web for brief reference information to interpret domain-specific clinical staging terms.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": "Search query string",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "number",
+            "name": "k",
+            "description": "Number of results or snippets to return",
+            "optional": true,
+            "default": 4,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "Brief search result summary",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
       }
     ],
     "files": [
@@ -100,7 +132,7 @@
     "dialogs": [
       {
         "role": "user",
-        "content": "Using the provided figure, determine its purpose (what information it is summarizing and why it is shown)."
+        "content": "What is the purpose of staging in this context?"
       },
       {
         "role": "assistant",
@@ -115,7 +147,7 @@
             }
           }
         ],
-        "thought": "First orient to the figure type and overall content (flowchart/tree summarizing cohort and test results)."
+        "thought": "First orient to the figure type and overall content, since it appears to be a cohort flowchart summarizing diagnostic and staging branches."
       },
       {
         "role": "tool",
@@ -138,7 +170,7 @@
             }
           }
         ],
-        "thought": "Extract the figure labels to confirm it summarizes surgical histology, nodal stage, ultrasound visibility, and US-guided core biopsy outcomes with patient counts."
+        "thought": "Extract the labels to confirm that the diagram summarizes surgical histology, nodal stage, ultrasound visibility, and ultrasound-guided core biopsy outcomes with patient counts."
       },
       {
         "role": "tool",
@@ -146,6 +178,30 @@
         "content": {
           "type": "text",
           "content": "(300, 8, 466, 44) Study group\n(332, 45, 414, 73) n=166\n(216, 110, 274, 140) hist -\n(224, 141, 286, 170) n=102\n(410, 110, 468, 140) hist +\n(418, 141, 480, 170) n=64\n(170, 214, 250, 244) stage 1\n(186, 245, 246, 274) n=102\n(360, 214, 440, 244) stage 2\n(376, 245, 422, 274) n=44\n(520, 214, 606, 244) stage3\n(540, 245, 590, 274) n=20\n(84, 320, 190, 352) US node+\n(110, 353, 170, 382) n=57\n(220, 320, 330, 352) US node-\n(246, 353, 306, 382) n=45\n(320, 320, 430, 352) US node+\n(346, 353, 406, 382) n=27\n(450, 320, 560, 352) US node-\n(476, 353, 536, 382) n=17\n(520, 320, 630, 352) US node+\n(546, 353, 606, 382) n=19\n(650, 320, 760, 352) US node-\n(686, 353, 726, 382) n=1\n(70, 430, 140, 460) USB\n(78, 461, 138, 490) n=19\n(160, 430, 260, 460) no USB\n(178, 461, 238, 490) n=38\n(320, 430, 390, 460) USB\n(328, 461, 388, 490) n=16\n(410, 430, 510, 460) no USB\n(428, 461, 488, 490) n=11\n(520, 430, 590, 460) USB\n(528, 461, 588, 490) n=19\n(610, 430, 710, 460) no USB\n(640, 461, 700, 490) n=0\n(56, 540, 80, 568) M\n(52, 569, 92, 598) n=0\n(110, 540, 132, 568) B\n(100, 569, 150, 598) n=14\n(170, 540, 210, 568) SE\n(170, 569, 210, 598) n=5\n(306, 540, 330, 568) M\n(300, 569, 350, 598) n=9\n(360, 540, 382, 568) B\n(350, 569, 400, 598) n=6\n(420, 540, 460, 568) SE\n(420, 569, 460, 598) n=1\n(506, 540, 530, 568) M\n(496, 569, 546, 598) n=18\n(560, 540, 582, 568) B\n(552, 569, 602, 598) n=1\n(620, 540, 660, 568) SE\n(620, 569, 660, 598) n=0"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GoogleSearch",
+              "arguments": {
+                "query": "What is the purpose of nodal staging involving ultrasound core biopsy outcomes and in what stage it is useful?",
+                "k": 4
+              }
+            }
+          }
+        ],
+        "thought": "Clarify what staging refers to in this diagram and what clinical purpose it serves, so the figure purpose can be explained in terms of nodal staging and biopsy triage."
+      },
+      {
+        "role": "tool",
+        "name": "GoogleSearch",
+        "content": {
+          "type": "text",
+          "content": "Nodal staging is used to estimate the extent of lymph-node involvement, guide treatment planning, and help decide whether patients should proceed to further axillary surgery or other management. Ultrasound with needle or core biopsy is especially useful preoperatively when suspicious nodes are seen, helping identify patients with higher-stage nodal disease before surgery."
         }
       },
       {
@@ -163,7 +219,7 @@
             }
           }
         ],
-        "thought": "Verify in the main branching region that the figure is a cohort summary linking surgical histology/nodal stage with ultrasound node visibility and biopsy results."
+        "thought": "Verify in the main branching region that the figure links surgical nodal stage with ultrasound node status and biopsy outcomes, which explains why the staging summary is shown."
       },
       {
         "role": "tool",
@@ -175,13 +231,13 @@
       },
       {
         "role": "assistant",
-        "content": "The purpose of the figure is to present a summary of the surgical histology and preoperative ultrasound (US) core biopsy results for a group of patients. It shows the number of patients with different outcomes, such as the presence or absence of malignant nodes on surgical histology, the nodal stage at surgery, the visibility of nodes on ultrasound, and the results of the US core biopsy. This information helps to understand the correlation between preoperative ultrasound findings, US-guided core biopsy results, and the actual nodal stage at surgery."
+        "content": "The purpose of the figure is to summarize how patients in the study are distributed by surgical histology, nodal stage, ultrasound node status, and ultrasound-guided core biopsy outcomes. It is shown to illustrate how preoperative ultrasound and biopsy findings relate to nodal staging at surgery, helping assess how useful ultrasound-guided biopsy is for identifying patients with nodal involvement before surgery and for treatment planning."
       }
     ],
     "gt_answer": {
       "whitelist": [
         [
-          "The purpose of the figure is to present a summary of the surgical histology and preoperative ultrasound (US) core biopsy results for a group of patients. It shows the number of patients with different outcomes, such as the presence or absence of malignant nodes on surgical histology, the nodal stage at surgery, the visibility of nodes on ultrasound, and the results of the US core biopsy. This information helps to understand the correlation between preoperative ultrasound findings, US-guided core biopsy results, and the actual nodal stage at surgery."
+          "The purpose of the figure is to summarize how patients in the study are distributed by surgical histology, nodal stage, ultrasound node status, and ultrasound-guided core biopsy outcomes. It is shown to illustrate how preoperative ultrasound and biopsy findings relate to nodal staging at surgery, helping assess how useful ultrasound-guided biopsy is for identifying patients with nodal involvement before surgery and for treatment planning."
         ]
       ],
       "blacklist": null

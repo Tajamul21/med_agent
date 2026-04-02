@@ -115,7 +115,7 @@
             }
           }
         ],
-        "thought": "Check for any figure labels/axes that indicate MRI type or contrast protocol."
+        "thought": "Check axes/labels to determine whether the figure represents a dynamic MRI measurement (e.g., signal vs time)."
       },
       {
         "role": "tool",
@@ -138,7 +138,7 @@
             }
           }
         ],
-        "thought": "Orient to what the figure depicts (e.g., time-signal enhancement curve consistent with DCE-MRI)."
+        "thought": "Understand whether the figure represents a time-dependent contrast uptake curve typical of dynamic MRI."
       },
       {
         "role": "tool",
@@ -158,19 +158,19 @@
               "arguments": {
                 "image": "../images/12671716_fig5.jpg",
                 "bbox": "(40,40,760,390)",
-                "attribute": "what is being plotted and what does it imply about imaging technique"
+                "attribute": "what is being plotted and what it implies about MRI acquisition technique"
               }
             }
           }
         ],
-        "thought": "Confirm the plotted variables indicate dynamic contrast-enhanced MRI time-course after contrast administration."
+        "thought": "Confirm that signal enhancement over time indicates contrast kinetics, characteristic of dynamic contrast-enhanced MRI."
       },
       {
         "role": "tool",
         "name": "RegionAttributeDescription",
         "content": {
           "type": "text",
-          "content": "The region shows signal enhancement curves over time (minutes) with distinct marker styles and error bars, indicating a dynamic time-dependent contrast uptake/wash-in measurement typical of dynamic contrast-enhanced MRI (DCE-MRI)."
+          "content": "The plot shows signal enhancement over time following contrast administration, with multiple curves indicating different conditions, consistent with dynamic contrast uptake and washout measurement typical of DCE-MRI."
         }
       },
       {

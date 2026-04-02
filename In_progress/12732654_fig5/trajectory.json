@@ -88,6 +88,38 @@
             "filetype": null
           }
         ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "Searches the web for brief reference information to interpret immunization protocols in EAE models.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": "Search query string",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "number",
+            "name": "k",
+            "description": "Number of results or snippets to return",
+            "optional": true,
+            "default": 4,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "Brief search result summary",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
       }
     ],
     "files": [
@@ -115,7 +147,7 @@
             }
           }
         ],
-        "thought": "Orient to figure type and what outcomes are being compared across immunization protocols."
+        "thought": "Orient to the figure type and determine what outcomes are being compared across different immunization conditions."
       },
       {
         "role": "tool",
@@ -138,7 +170,7 @@
             }
           }
         ],
-        "thought": "Extract labels for immunization protocols and measured endpoints from the figure text."
+        "thought": "Extract the immunization protocol names and outcome labels shown in the figure."
       },
       {
         "role": "tool",
@@ -163,7 +195,7 @@
             }
           }
         ],
-        "thought": "Confirm the endpoints being assessed (optic neuritis vs EAE) to link to purpose of protocols."
+        "thought": "Confirm that the endpoints being measured are optic neuritis and EAE incidence."
       },
       {
         "role": "tool",
@@ -175,7 +207,31 @@
       },
       {
         "role": "assistant",
-        "content": "The purpose of the immunization protocols in this study is to investigate the effects of different immunization methods on the development of optic neuritis and EAE (experimental autoimmune encephalomyelitis) in 2D2 TCR transgenic mice. EAE is a widely used animal model for studying multiple sclerosis, an autoimmune disease that affects the central nervous system. Optic neuritis is an inflammation of the optic nerve, which can be associated with multiple sclerosis. By comparing the outcomes of various immunization protocols, researchers aim to better understand the relationship between the immune response and the development of these conditions."
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "GoogleSearch",
+              "arguments": {
+                "query": "What do MOG35-55, PT alone, MOG35-55 100 µg, and MOG35-55 10 µg represent in EAE and optic neuritis?",
+                "k": 4
+              }
+            }
+          }
+        ],
+        "thought": "Clarify what each immunization condition represents biologically in EAE models (antigen, adjuvant, dose) to explain the purpose of comparing them."
+      },
+      {
+        "role": "tool",
+        "name": "GoogleSearch",
+        "content": {
+          "type": "text",
+          "content": "MOG35-55 is a myelin oligodendrocyte glycoprotein peptide used to induce EAE as an autoimmune model of multiple sclerosis. PT (pertussis toxin) is used as an adjuvant to enhance disease induction. Different doses of MOG35-55 (e.g., 100 µg vs 10 µg) modulate the severity and incidence of disease, allowing comparison of immune responses and pathology such as optic neuritis."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The purpose of the immunization protocols is to investigate how different immunization conditions (type of antigen, presence of adjuvant, and antigen dose) influence the development of optic neuritis and EAE. By comparing MOG35-55 with or without pertussis toxin and at different doses, the study evaluates how immune activation strength affects disease incidence and helps model autoimmune pathology relevant to multiple sclerosis."
       }
     ],
     "gt_answer": {
