@@ -1,0 +1,190 @@
+{
+  "12604589_fig2": {
+    "tools": [
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "12604589_fig2.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Using the provided histology figure, determine what type of staining is used."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/12604589_fig2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "First orient to modality and tissue appearance to infer stain type."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "A 2×2 panel of histology micrographs showing skeletal muscle fibers in cross-section with labels (e.g., wt, DB-/-, DB-/-,tgDB1, DB-/-,tgDB2). Fibers appear pale with darker nuclei and thin interstitial outlines; small inset boxes highlight regions."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/12604589_fig2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any figure annotations that explicitly mention the stain."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(10, 6, 67, 39) wt\n(335, 6, 409, 44) DB-/-\n(6, 301, 169, 343) DB-/-,tgDB1\n(331, 301, 508, 343) DB-/-,tgDB2"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/12604589_fig2.jpg",
+                "bbox": "(40, 60, 290, 250)",
+                "attribute": "staining characteristics (nuclear and cytoplasmic colors)"
+              }
+            }
+          }
+        ],
+        "thought": "Verify classic H&E pattern: basophilic nuclei and eosinophilic cytoplasm in muscle fibers."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "In this region, muscle fibers show lightly stained cytoplasm with scattered darker-stained nuclei; overall appearance is consistent with routine H&E-type contrast rather than special stains."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "Hematoxylin and eosin (H&E) staining is used in the image."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "Hematoxylin and eosin staining"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

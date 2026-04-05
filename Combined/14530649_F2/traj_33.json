@@ -1,0 +1,190 @@
+{
+  "14530649_F2": {
+    "tools": [
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "14530649_F2.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Using the provided gross specimen photo, determine the shape of the central cavity."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/14530649_F2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to gross specimen and identify the central cavity referenced by arrows."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Grayscale gross specimen photo showing two elongated, smooth, ovoid tissue pieces stacked horizontally. Two black arrows point to a narrow slit-like central cavity/cleft on the upper piece. A ruler with inch markings is visible along the bottom edge."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/14530649_F2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any labels or scale text that might clarify orientation; confirm no relevant annotation beyond ruler."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(28, 329, 63, 392) 2\n(360, 329, 409, 392) 4"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/14530649_F2.jpg",
+                "bbox": "(115, 85, 285, 155)",
+                "attribute": "shape of the central cavity/cleft indicated by the arrows"
+              }
+            }
+          }
+        ],
+        "thought": "Interrogate the arrowed region to characterize the cavity shape (e.g., fusiform vs round/irregular)."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Within the boxed region there is an elongated, spindle-like slit/cleft that is widest centrally and tapers toward both ends (fusiform appearance)."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The central cavity has a fusiform shape, which means it is spindle-like or elongated and tapers at both ends."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "fusiform."
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

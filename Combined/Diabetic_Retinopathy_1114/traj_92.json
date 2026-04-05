@@ -1,0 +1,190 @@
+{
+  "Diabetic_Retinopathy_1114": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "Diabetic_Retinopathy_43191_left.jpeg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "You are given a left fundus photograph. Determine the specific abnormality related to diabetic retinopathy (e.g., microaneurysms, hemorrhages, exudates, neovascularization) or state if none is present."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "Diabetic_Retinopathy_43191_left.jpeg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any embedded labels or grading text on the fundus photo that might indicate laterality or diagnosis."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "Diabetic_Retinopathy_43191_left.jpeg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to modality and look for obvious diabetic retinopathy stigmata on global view."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Color fundus photograph of the left eye showing the optic disc on the left and macula centrally/right. Retinal vessels appear normal caliber without obvious hemorrhages, hard exudates, cotton-wool spots, or neovascularization."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "Diabetic_Retinopathy_43191_left.jpeg",
+                "bbox": "(360, 220, 760, 620)",
+                "attribute": "presence of microaneurysms, hemorrhages, hard exudates, cotton-wool spots, or neovascularization"
+              }
+            }
+          }
+        ],
+        "thought": "Interrogate the posterior pole/macula region where early DR lesions (microaneurysms, exudates) would be expected."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "In this posterior pole region, the macula appears without hard exudates or hemorrhages; no visible microaneurysms or cotton-wool spots; no neovascular fronds seen."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "No diabetic retinopathy."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "No diabetic retinopathy."
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

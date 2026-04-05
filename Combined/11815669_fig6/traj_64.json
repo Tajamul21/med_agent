@@ -1,0 +1,190 @@
+{
+  "11815669_fig6": {
+    "tools": [
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "11815669_fig6.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "In the provided figure, what variable is plotted on the y-axis?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/11815669_fig6.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to the figure type and locate axes/labels."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "A scientific figure showing a scatter/strip plot with multiple groups (control, volume-overload with -propranolol and +propranolol). The left side has a y-axis with tick marks from 0 to 6 and a stacked label reading 'wet/dry' with units 'mg/mg'. Small histology insets appear above the plot."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/11815669_fig6.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Read the y-axis label text directly."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(11, 214, 94, 366) wet\n(12, 372, 90, 411) dry\n(21, 419, 61, 442) mg\n(20, 448, 61, 472) mg\n(66, 200, 96, 210) 6\n(66, 281, 96, 291) 4\n(66, 362, 96, 372) 2\n(66, 443, 96, 453) 0\n(165, 408, 217, 490) wild-type\n(256, 382, 311, 490) heterozygous\n(339, 414, 392, 490) ΔF508\n(214, 511, 302, 541) control\n(401, 414, 453, 490) wild-type\n(492, 382, 547, 490) heterozygous\n(575, 414, 628, 490) ΔF508\n(418, 511, 539, 541) -propranolol\n(636, 414, 688, 490) wild-type\n(727, 382, 782, 490) heterozygous\n(810, 414, 863, 490) ΔF508\n(655, 511, 776, 541) +propranolol\n(468, 555, 744, 585) volume-overload"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11815669_fig6.jpg",
+                "bbox": "(0,190,120,480)",
+                "attribute": "y-axis label and units"
+              }
+            }
+          }
+        ],
+        "thought": "Confirm the y-axis label context (wet/dry ratio and units) from the axis region."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "The left y-axis region shows a stacked label 'wet' over 'dry' indicating a wet-to-dry ratio, with units displayed as mg/mg, alongside tick marks from 0 to 6."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The y-axis in the graph represents the lung wet-to-dry weight ratio."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "lung wet/dry weight ratio."
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

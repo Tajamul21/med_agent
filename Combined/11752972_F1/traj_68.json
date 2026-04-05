@@ -1,0 +1,190 @@
+{
+  "11752972_F1": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "11752972_F1.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "You are given a brain MRI figure. What is the main problem in the hippocampus?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/11752972_F1.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any on-image labels/annotations that indicate the intended structure or finding."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(6, 7, 92, 22) JUNG SIM\n(6, 24, 40, 35) 05-2\n(6, 38, 46, 49) JUN-74\n(78, 38, 160, 50) 25-MAY-95\n(78, 52, 140, 64) 12:45:23\n(6, 350, 40, 360) 6000\n(6, 362, 24, 372) 90\n(6, 374, 30, 384) 4:14\n(6, 386, 44, 396) 250.0\n(6, 398, 30, 408) 512"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/11752972_F1.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to modality/plane and identify any marked region (e.g., arrow) suggesting the focus."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Coronal brain MRI slice in grayscale with an arrow pointing to the medial temporal lobe region on the left side of the image; the temporal horns appear prominent suggesting medial temporal/hippocampal volume loss."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11752972_F1.jpg",
+                "bbox": "(70,190,170,270)",
+                "attribute": "Describe the structure indicated by the arrow and any atrophy/volume loss in this medial temporal region"
+              }
+            }
+          }
+        ],
+        "thought": "Verify the arrowed medial temporal structure and whether it appears atrophic, consistent with hippocampal atrophy."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "In the arrowed medial temporal lobe region, the hippocampal formation appears small with widened surrounding CSF spaces and an enlarged adjacent temporal horn, consistent with marked hippocampal/medial temporal atrophy."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The main focus of the image is the hippocampus, which is a region of the brain involved in learning and memory. The image shows severe hippocampal atrophy, which means that the hippocampus has significantly decreased in size."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "hippocampal atrophy"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

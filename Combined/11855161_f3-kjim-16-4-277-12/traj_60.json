@@ -1,0 +1,190 @@
+{
+  "11855161_f3-kjim-16-4-277-12": {
+    "tools": [
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "11855161_f3-kjim-16-4-277-12.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "What type of tissue is shown in the image?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/11855161_f3-kjim-16-4-277-12.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "First orient to modality and overall histologic pattern to determine tissue type."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Grayscale histology micrograph showing numerous spindle-shaped cells with dark nuclei in a fibrous-appearing stroma; scattered round clear spaces/vacuoles are present. No obvious glandular epithelial structures are seen."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/11855161_f3-kjim-16-4-277-12.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any labels/annotations on the histology image that might specify tissue type or stain."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/11855161_f3-kjim-16-4-277-12.jpg",
+                "bbox": "(40, 40, 360, 250)",
+                "attribute": "cell morphology and tissue architecture"
+              }
+            }
+          }
+        ],
+        "thought": "Verify in a representative region whether the predominant cells are mesenchymal/spindle and whether this appears neoplastic rather than normal tissue."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Region shows a proliferation of spindle/stellate cells with elongated hyperchromatic nuclei arranged in loose fascicles within collagenous stroma; overall appearance is mesenchymal with increased cellularity compared with normal connective tissue."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The histologic section in the image shows a tumor tissue characterized by mesenchymal cell proliferation."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "tumor tissue"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

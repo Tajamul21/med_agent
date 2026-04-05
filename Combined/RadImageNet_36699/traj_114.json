@@ -1,0 +1,190 @@
+{
+  "RadImageNet_36699": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "RadImageNet_spine030716.png",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Review the provided spine axial MRI image and state the main observable finding."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "RadImageNet_spine030716.png"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any embedded labels/sequence markers that might indicate level or modality."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "RadImageNet_spine030716.png"
+              }
+            }
+          }
+        ],
+        "thought": "Identify modality/anatomy and look for gross abnormality pattern."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Axial grayscale MRI slice of the lumbar spine showing the vertebral body anteriorly, spinal canal with thecal sac centrally, and posterior paraspinal muscles; there is a posterior disc contour that appears to protrude toward the canal."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "RadImageNet_spine030716.png",
+                "bbox": "(70,60,190,150)",
+                "attribute": "intervertebral disc contour and relationship to the spinal canal"
+              }
+            }
+          }
+        ],
+        "thought": "Confirm whether the disc shows protrusion/herniation consistent with disc pathology."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Within this central region, the posterior margin of the intervertebral disc appears bulged/protruded into the anterior aspect of the spinal canal, mildly indenting the thecal sac."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "Disc pathology"
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "Disc pathology"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

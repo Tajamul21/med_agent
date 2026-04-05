@@ -1,0 +1,190 @@
+{
+  "Retinal_OCT-C8_0324": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "Retinal_OCT-C8_amd_val_1086.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "What medical imaging technique is utilized to capture this image?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "Retinal_OCT-C8_amd_val_1086.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any embedded modality labels or scan annotations that explicitly state the imaging technique."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "Retinal_OCT-C8_amd_val_1086.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Identify the modality by overall appearance (retinal layer cross-sectional morphology typical of OCT)."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Grayscale cross-sectional scan of the retina showing layered retinal architecture with a bright banded appearance and darker vitreous above, consistent with a macular optical coherence tomography (OCT) B-scan."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "Retinal_OCT-C8_amd_val_1086.jpg",
+                "bbox": "(40, 80, 980, 430)",
+                "attribute": "anatomic structures and layer pattern"
+              }
+            }
+          }
+        ],
+        "thought": "Confirm the presence of characteristic retinal layers and vitreoretinal interface seen on OCT B-scan."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "The region shows a retinal cross-section with multiple hyperreflective and hyporeflective bands (retinal layers), a smooth vitreoretinal interface superiorly, and deeper choroidal signal attenuation—typical OCT B-scan appearance."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "Optical Coherence Tomography (OCT)"
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "Optical Coherence Tomography (OCT)"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

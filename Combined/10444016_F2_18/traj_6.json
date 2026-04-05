@@ -1,0 +1,272 @@
+
+
+
+{
+  "10444016_F2_18": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "The tool can search the input query text from Google and return the related results.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "int",
+            "name": "k",
+            "description": "Select the first k results",
+            "optional": true,
+            "default": 10,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }     
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "10444016_F2.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Determine the imaging plane or view of the image?"
+      },
+      {
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "OCR",
+            "arguments": {
+              "image": "../images/10444016_F2.jpg"
+            }
+          }
+        }
+      ],
+      "thought": "Extract any on-image orientation markers or labels (e.g., R/L, A/P) that indicate the MRI plane."
+    },
+    {
+      "role": "tool",
+      "name": "OCR",
+      "content": {
+        "type": "text",
+        "content": "Se:4/4\n Im:1/30\n Ax:8.0\n 09/17/97\n 08:59\n R\n L\nTR:4350\n TE:34/61\n FOV:38x38"
+      }
+    },
+    {
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "ImageDescription",
+            "arguments": {
+              "image": "../images/10444016_F2.jpg"
+            }
+          }
+        }
+      ],
+      "thought": "Get a brief global description to infer whether the slice looks axial, sagittal, or coronal based on overall anatomy layout."
+    },
+    {
+      "role": "tool",
+      "name": "ImageDescription",
+      "content": {
+        "type": "text",
+        "content": "Grayscale MRI slice showing a symmetric cross-sectional anatomy with left and right soft tissues and muscle groups, and a central round airway-like structure; an arrow points to a lesion/mass near the midline. Orientation markers R and L appear on the sides."
+      }
+    },
+    {
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "GoogleSearch",
+            "arguments": {
+              "query": "MRI planes how to distinguish axial coronal sagittal by symmetry left right R L markers",
+              "k": 5
+            }
+          }
+        }
+      ],
+      "thought": "Sanity-check typical visual cues for MRI planes (symmetry, airway appearance, R/L markers) to support the final classification."
+    },
+    {
+      "role": "tool",
+      "name": "GoogleSearch",
+      "content": {
+        "type": "text",
+        "content": "1) Radiopaedia: MRI planes (axial, coronal, sagittal) and how to recognize them by anatomy orientation.\n2) MRIquestions: Imaging planes—axial/transverse vs coronal vs sagittal with common viewing conventions.\n3) Kenhub/Anatomy resources: Cross-sectional (axial) anatomy shows bilateral symmetry and round airway/lumen.\n4) University radiology teaching file: Recognizing axial neck MRI by paired muscles and central airway.\n5) StatPearls/Imaging basics: R/L markers and slice appearance across standard planes."
+      }
+    },
+    {
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "RegionAttributeDescription",
+            "arguments": {
+              "image": "../images/10444016_F2.jpg",
+              "attribute": "presence and appearance of a central airway-like structure"
+            }
+          }
+        }
+      ],
+      "thought": "Verify whether the image contains a central round airway structure consistent with a cross-sectional (axial) appearance."
+    },
+    {
+      "role": "tool",
+      "name": "RegionAttributeDescription",
+      "content": {
+        "type": "text",
+        "content": "The image contains a centrally located, roughly circular dark lumen surrounded by soft tissue, consistent with an airway or trachea seen in cross-section."
+      }
+    },
+    {
+      "role": "assistant",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "RegionAttributeDescription",
+            "arguments": {
+              "image": "../images/10444016_F2.jpg",
+              "attribute": "bilateral symmetry of lateral cervical soft tissues"
+            }
+          }
+        }
+      ],
+      "thought": "Assess left–right symmetry of neck musculature to distinguish coronal from sagittal views."
+    },
+    {
+      "role": "tool",
+      "name": "RegionAttributeDescription",
+      "content": {
+        "type": "text",
+        "content": "Lateral soft tissues and muscle groups appear symmetrically distributed on both sides of the image, supporting a coronal imaging plane."
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "The image shows a coronal MRI view of the cervical mass."
+    }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "coronal MRI view"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

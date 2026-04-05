@@ -1,0 +1,190 @@
+{
+  "12647644_f1-kjim-17-4-266-11": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "12647644_f1-kjim-17-4-266-11.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "What organ is shown in the image?"
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/12647644_f1-kjim-17-4-266-11.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any embedded CT slice labels/orientation and identify the organ"
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(6, 5, 62, 24) SPI 6\n(11, 186, 44, 198) 120\n(11, 201, 44, 213) 200\n(11, 216, 44, 228) 0.75\n(11, 231, 44, 243) 0.0\n(11, 246, 44, 258) 5.0/5.0\n(11, 261, 44, 273) 2/25\n(586, 214, 607, 226) 10\n(586, 230, 607, 242) C\n(586, 246, 607, 258) m"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/12647644_f1-kjim-17-4-266-11.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to modality and abdominal level; identify key organs in the axial CT."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Axial contrast-enhanced CT image of the upper abdomen showing liver on the patient’s right, stomach with air/fluid, spleen on the left, and central retroperitoneal structures near the aorta/IVC."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/12647644_f1-kjim-17-4-266-11.jpg",
+                "bbox": "(235,120,455,210)",
+                "attribute": "identify the organ/tissue in this central upper abdominal region anterior to the great vessels"
+              }
+            }
+          }
+        ],
+        "thought": "Verify the suspected pancreas location (retroperitoneal, anterior to aorta/IVC, posterior to stomach) on this slice."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "This region shows an elongated, lobulated soft-tissue structure coursing transversely in the upper abdomen, posterior to the stomach and anterior to the aorta/IVC—appearance and location consistent with the pancreas."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The image shows the pancreas, which is an organ in the digestive system."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "pancreas"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

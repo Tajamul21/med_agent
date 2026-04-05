@@ -1,0 +1,190 @@
+{
+  "ISIC2018_0116": {
+    "tools": [
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "ISIC2018_ISIC_0034492.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "You are given a dermoscopic skin lesion image. Determine the most likely abnormality type (diagnosis category) present."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "ISIC2018_ISIC_0034492.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Check for any embedded labels/scale markers that might indicate lesion type or context."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": ""
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "ISIC2018_ISIC_0034492.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Orient to modality and gross dermoscopic pattern to narrow diagnosis."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "Dermoscopy close-up of a skin lesion with irregular, patchy light-to-dark brown pigmentation on a pink background; asymmetric distribution with ill-defined borders and scattered darker foci."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "ISIC2018_ISIC_0034492.jpg",
+                "bbox": "(120,170,470,360)",
+                "attribute": "dermoscopic pattern and border regularity"
+              }
+            }
+          }
+        ],
+        "thought": "Verify key malignant features (asymmetry, irregular network/blotches, atypical pigmentation) in the main lesion area."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "Region shows asymmetric, irregularly distributed brown blotches with variegated pigmentation and poorly circumscribed margins; patchy structureless areas with scattered darker dots/clods."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "Melanoma"
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "Melanoma"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

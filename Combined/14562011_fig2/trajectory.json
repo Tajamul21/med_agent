@@ -1,0 +1,190 @@
+{
+  "14562011_fig2": {
+    "tools": [
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "OCR",
+        "description": "This tool can recognize all text on the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "RegionAttributeDescription",
+        "description": "Describe the attribute of a region of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "bbox",
+            "description": "The bbox coordinate in the format of `(x1, y1, x2, y2)`",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "text",
+            "name": "attribute",
+            "description": "The attribute to describe",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "14562011_fig2.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Using the provided figure, determine what the figure is mainly illustrating."
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "ImageDescription",
+              "arguments": {
+                "image": "../images/14562011_fig2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "First identify the plot type and what variable is being compared across groups."
+      },
+      {
+        "role": "tool",
+        "name": "ImageDescription",
+        "content": {
+          "type": "text",
+          "content": "A black-and-white Kaplan–Meier style survival plot. Y-axis is cumulative survival (%) and x-axis is survival (months) up to about 120. Multiple stepwise curves are shown with a legend titled 'Tumour response' including categories such as no assessment, decrease, increase, and static."
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "OCR",
+              "arguments": {
+                "image": "../images/14562011_fig2.jpg"
+              }
+            }
+          }
+        ],
+        "thought": "Read the axis and legend text to confirm that the curves represent survival grouped by tumor response categories."
+      },
+      {
+        "role": "tool",
+        "name": "OCR",
+        "content": {
+          "type": "text",
+          "content": "(30, 50, 170, 95) 1.0\n(30, 135, 170, 175) 0.8\n(30, 220, 170, 260) 0.6\n(30, 305, 170, 345) 0.4\n(30, 390, 170, 430) 0.2\n(30, 475, 170, 515) 0.0\n(5, 230, 60, 520) Cum. survival (%)\n(210, 520, 520, 600) Survival (months)\n(470, 120, 720, 170) Tumour response\n(510, 175, 720, 220) No assessment\n(510, 235, 650, 275) Decrease\n(510, 295, 650, 335) Increase\n(510, 355, 650, 395) Static\n(180, 495, 210, 515) 0\n(250, 495, 290, 515) 12\n(320, 495, 360, 515) 24\n(390, 495, 430, 515) 36\n(460, 495, 500, 515) 48\n(530, 495, 570, 515) 60\n(600, 495, 640, 515) 72\n(670, 495, 710, 515) 84\n(730, 495, 770, 515) 96\n(790, 495, 840, 515) 108\n(850, 495, 900, 515) 120"
+        }
+      },
+      {
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "type": "function",
+            "function": {
+              "name": "RegionAttributeDescription",
+              "arguments": {
+                "image": "../images/14562011_fig2.jpg",
+                "bbox": "(450,110,735,410)",
+                "attribute": "legend categories and what grouping variable the survival curves are divided by"
+              }
+            }
+          }
+        ],
+        "thought": "Verify that the legend explicitly divides the patients by tumor size response patterns after treatment."
+      },
+      {
+        "role": "tool",
+        "name": "RegionAttributeDescription",
+        "content": {
+          "type": "text",
+          "content": "The region shows the plot legend titled 'Tumour response' with line-style keys for groups: 'No assessment', 'Decrease', 'Increase', and 'Static', indicating that the survival curves are separated by tumor response or tumor size trend categories."
+        }
+      },
+      {
+        "role": "assistant",
+        "content": "The figure is a survival curve of cancer patients, divided by the response to a treatment based on tumor size trends (no assessment, decrease, increase, static)."
+      }
+    ],
+    "gt_answer": {
+      "whitelist": [
+        [
+          "The figure is a survival curve of cancer patients, divided by the response to a treatment based on tumor size trends (no assessment, decrease, increase, static)."
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}

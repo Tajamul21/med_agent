@@ -1,0 +1,134 @@
+{
+  "10444014_F1_15": {
+    "tools": [
+      {
+        "name": "ImageDescription",
+        "description": "A useful tool that returns a brief description of the input image.",
+        "inputs": [
+          {
+            "type": "image",
+            "name": "image",
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      },
+      {
+        "name": "GoogleSearch",
+        "description": "A tool that performs a Google search and returns the top k results.",
+        "inputs": [
+          {
+            "type": "text",
+            "name": "query",
+            "description": "The search query string.",
+            "optional": false,
+            "default": null,
+            "filetype": null
+          },
+          {
+            "type": "integer",
+            "name": "k",
+            "description": "The number of top search results to return.",
+            "optional": true,
+            "default": 3,
+            "filetype": null
+          }
+        ],
+        "outputs": [
+          {
+            "type": "text",
+            "name": null,
+            "description": null,
+            "optional": false,
+            "default": null,
+            "filetype": null
+          }
+        ]
+      }
+    ],
+    "files": [
+      {
+        "type": "image",
+        "path": "10444014_F1.jpg",
+        "url": null
+      }
+    ],
+    "dialogs": [
+      {
+        "role": "user",
+        "content": "Identify the organ shown and state whether this anatomical variant is common or rare."
+      },
+      {
+      "role": "assistant",
+      "thought": "First, review the gross specimen to identify the organ and any duplicated or accessory structures.",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "ImageDescription",
+            "arguments": {
+              "image": "../images/10444014_F1.jpg"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "name": "ImageDescription",
+      "content": {
+        "type": "text",
+        "content": "Gross specimen photograph showing an elongated sac-like organ consistent with a gallbladder, along with a smaller separate sac-like structure in the foreground, suggesting a duplicated or accessory biliary structure. A scale/ruler is present below the specimen."
+      }
+    },
+    {
+      "role": "assistant",
+      "thought": "Use general medical knowledge to determine how common accessory gallbladders are.",
+      "tool_calls": [
+        {
+          "type": "function",
+          "function": {
+            "name": "GoogleSearch",
+            "arguments": {
+              "query": "accessory gallbladder incidence rare congenital anomaly",
+              "k": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "name": "GoogleSearch",
+      "content": {
+        "type": "text",
+        "content": "Accessory or duplicated gallbladder is a rare congenital biliary anomaly, reported in a very small percentage of the population and often discovered incidentally during imaging or surgery."
+      }
+    },
+    {
+      "role": "assistant",
+      "content": "The organ shown is the gallbladder. The presence of an additional smaller sac-like structure highlights an accessory gallbladder. This is a rare congenital anatomical variant and is usually discovered incidentally during imaging or surgical procedures."
+    }
+   ],
+    "gt_answer": {
+      "whitelist": [
+        [
+         "Gallbladder, Rare"
+        ]
+      ],
+      "blacklist": null
+    }
+  }
+}
