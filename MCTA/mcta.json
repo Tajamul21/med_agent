@@ -20510,7 +20510,7 @@
     "dialogs": [
       {
         "role": "user",
-        "content": "Review the provided axial chest CT image and determine whether there is imaging evidence consistent with COVID-19 pneumonia (e.g., peripheral bilateral ground-glass opacities/consolidation). Answer Yes/No."
+        "content": "Review the provided axial chest CT image and determine whether there is imaging evidence consistent with COVID-19 pneumonia (e.g., peripheral bilateral ground-glass opacities/consolidation)"
       },
       {
         "role": "assistant",
